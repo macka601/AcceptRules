@@ -1,6 +1,6 @@
 name: AcceptRules
-version: 1.7
-main: me.rigi.acceptrules.AcceptRulesMain
+version: 1.7.1
+main: nz.net.mcewan.AcceptRulesMain
 permissions:
     acceptrules.settp:
         description: /acceptrules settp

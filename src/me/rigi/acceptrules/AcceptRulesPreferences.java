@@ -1,11 +1,12 @@
 package me.rigi.acceptrules;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.util.List;
+
 import org.bukkit.Location;
 
 public class AcceptRulesPreferences {
@@ -41,7 +42,7 @@ public class AcceptRulesPreferences {
 			try{
 				  FileWriter fstream = new FileWriter(Users, append);
 				  PrintWriter out = new PrintWriter(fstream, true); 
-				  out.write(username + ";");					  
+				  out.write(username + "\n");					  
 				  out.close(); //Close the output stream
 				  }catch (Exception e){//Catch exception if any
 				  System.err.println("Error: " + e.getMessage());
@@ -49,15 +50,14 @@ public class AcceptRulesPreferences {
 		}		
 	 static void UserReader() {		 
 		 try{
-		 FileReader fstream = new FileReader(Users);			
-			BufferedReader in = new BufferedReader(fstream);
-			String input=in.readLine();
-			if(input != null){
-			String[] items = input.split(";");
-			 for(String playername : items){
-				 AcceptRulesMain.players.add(playername);
-			 }
+		 	
+			List<String> lines = Files.readAllLines(Users.toPath());
+				
+			for(String line: lines)
+			{
+				AcceptRulesMain.players.add(line);
 			}
+			
 		 }catch (Exception e){//Catch exception if any
 			  System.err.println("Error: " + e.getMessage());
 			  }
@@ -65,12 +65,19 @@ public class AcceptRulesPreferences {
 	 
 	 static void RulesReader() {		 
 		 try{
-		 FileReader fstream = new FileReader(Rules);			
-			BufferedReader in = new BufferedReader(fstream);
-			String rule = null;
-			 while ((rule = in.readLine()) != null) {
-				 AcceptRulesMain.rules.add(rule);
-		        }
+			List<String> lines = Files.readAllLines(Rules.toPath());
+			
+			for(String line: lines)
+			{
+				AcceptRulesMain.rules.add(line);
+			}
+			
+//		 FileReader fstream = new FileReader(Rules);			
+//			BufferedReader in = new BufferedReader(fstream);
+//			String rule = null;
+//			 while ((rule = in.readLine()) != null) {
+//				 AcceptRulesMain.rules.add(rule);
+//		        }
 
 		 }catch (Exception e){//Catch exception if any
 			  System.err.println("Error: " + e.getMessage());

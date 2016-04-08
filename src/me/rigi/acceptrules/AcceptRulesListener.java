@@ -11,82 +11,92 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.scheduler.BukkitScheduler;
 
 public class AcceptRulesListener implements Listener {
 
 	@EventHandler
-	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event){
-			Player player = event.getPlayer();
-			String cmd = event.getMessage();
-			String[] args = event.getMessage().split(" ");
-			String[] command = AcceptRulesMain.RulesCmd.split(" ");
-			
-		if(cmd.equalsIgnoreCase(AcceptRulesMain.RulesCmd)){
-			if(!(AcceptRulesMain.readed.contains(player))){
-				AcceptRulesMain.readed.add(player);	
+	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+		Player player = event.getPlayer();
+		String cmd = event.getMessage();
+		String[] args = event.getMessage().split(" ");
+		String[] command = AcceptRulesMain.RulesCmd.split(" ");
+
+		if (cmd.equalsIgnoreCase(AcceptRulesMain.RulesCmd)) {
+			if (!(AcceptRulesMain.readed.contains(player))) {
+				AcceptRulesMain.readed.add(player);
 			}
-			if(AcceptRulesMain.RulesMngr){
+			if (AcceptRulesMain.RulesMngr) {
 				event.setCancelled(true);
-				 for(String r:AcceptRulesMain.rules){
-					 player.sendMessage(ChatColor.GREEN+r);
-				 }
-			 }
-			
-		}else{
-			if(!args[0].equalsIgnoreCase(command[0]) && AcceptRulesMain.BlockCmds && !args[0].equalsIgnoreCase("/acceptrules") && !AcceptRulesMain.players.contains(event.getPlayer().getName())){
+				for (String r : AcceptRulesMain.rules) {
+					player.sendMessage(ChatColor.GREEN + r);
+				}
+			}
+
+		} else {
+			if (!args[0].equalsIgnoreCase(command[0]) && AcceptRulesMain.BlockCmds
+					&& !args[0].equalsIgnoreCase("/acceptrules")
+					&& !AcceptRulesMain.players.contains(event.getPlayer().getUniqueId().toString())) {
 				player.sendMessage(AcceptRulesMain.InformMsg.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1"));
 				event.setCancelled(true);
-			}			
+			}
 		}
-		
-		}
+
+	}
+
 	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event){
-		if(!AcceptRulesMain.players.contains(event.getPlayer().getName())){
-			if(AcceptRulesMain.TpOnJoin==true){
+	// public void onPlayerJoin(PlayerJoinEvent event)
+	void onPlayerJoin(PlayerJoinEvent event) {
+		if (!AcceptRulesMain.players.contains(event.getPlayer().getUniqueId().toString())) {
+			if (AcceptRulesMain.TpOnJoin == true) {
 				Location loc = new Location(Bukkit.getWorld("world"), 0, 0, 0, 0, 0);
-				if(!AcceptRulesMain.SpawnPosition.equals(loc)){
+				if (!AcceptRulesMain.SpawnPosition.equals(loc)) {
 					event.getPlayer().teleport(AcceptRulesMain.SpawnPosition);
 				}
 			}
-			if(AcceptRulesMain.Inform==true){
+			if (AcceptRulesMain.Inform == true) {
 				final Player player = event.getPlayer();
+				BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 				
-				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(new AcceptRulesMain(), new Runnable() {
-				    public void run() {
-				    	player.sendMessage(AcceptRulesMain.InformMsg.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1"));
-				    }
+				scheduler.scheduleSyncDelayedTask(AcceptRulesMain.plugin, new Runnable()  {
+					public void run() {
+						player.sendMessage(
+								AcceptRulesMain.InformMsg.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1"));
+					}
 				}, 10L);
-				
 			}
 		}
-	
+
 	}
+
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
-		Player player = event.getPlayer();	
-		if(AcceptRulesMain.AllowBuild==false){
-			if (AcceptRulesMain.players.contains(player.getName())){
-			}else{
+		Player player = event.getPlayer();
+		if (AcceptRulesMain.AllowBuild == false) {
+			if (AcceptRulesMain.players.contains(player.getUniqueId().toString())) {
+			} else {
 				event.setCancelled(true);
 				player.sendMessage(AcceptRulesMain.CantBuildMsg.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1"));
 			}
 		}
 	}
+
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
 		Player player = event.getPlayer();
-		if(AcceptRulesMain.AllowBuild==false){
-			if (AcceptRulesMain.players.contains(player.getName())){
-			}else{
+		if (AcceptRulesMain.AllowBuild == false) {
+			if (AcceptRulesMain.players.contains(player.getUniqueId().toString())) {
+			} else {
 				event.setCancelled(true);
 				player.sendMessage(AcceptRulesMain.CantBuildMsg.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1"));
 			}
 		}
 	}
+
 	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent event){
-		if((!AcceptRulesMain.players.contains(event.getPlayer().getName()))&& (AcceptRulesMain.AllowMove == false)){
+	public void onPlayerMove(PlayerMoveEvent event) {
+		if ((!AcceptRulesMain.players.contains(event.getPlayer().getUniqueId().toString()))
+				&& (AcceptRulesMain.AllowMove == false)) {
 			event.setCancelled(true);
 		}
 	}

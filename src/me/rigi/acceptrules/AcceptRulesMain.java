@@ -27,6 +27,7 @@ public class AcceptRulesMain extends JavaPlugin {
 	}
 	//@Override
 	public void onEnable() {
+		plugin = this;
 		PluginManager pm = getServer().getPluginManager();
 		AcceptRulesPreferences acceptrulespreferences = new AcceptRulesPreferences();
 		acceptrulespreferences.createDir();		
@@ -35,7 +36,7 @@ public class AcceptRulesMain extends JavaPlugin {
 		saveConfig();
 		config = getConfig();
 		AcceptedMsg = config.getString("AcceptedMsg", "You have succesfully accepted the rules! Have fun!");
-		AcceptedAllreadyMsg = config.getString("AcceptedAllreadyMsg", "You have allready accepted the rules!");
+		AcceptedAllreadyMsg = config.getString("AcceptedAllreadyMsg", "You have already accepted the rules!");
 		CantBuildMsg = config.getString("CantBuildMsg", "You must accept rules to build!");
 		MustReadRules = config.getString("MustReadRules", "You must read the rules in order to accept them!");
 		InformMsg = config.getString("InformMsg","You have to accept the rules! Use /rules and then /acceptrules!");
@@ -123,4 +124,3 @@ public class AcceptRulesMain extends JavaPlugin {
 
 	}
 }
-

@@ -3,6 +3,7 @@ package me.rigi.acceptrules;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,30 +25,36 @@ private AcceptRulesMain plugin;
 		if (commandLabel.equalsIgnoreCase("acceptrules")) {
 			if (sender instanceof Player){
 				if(args.length == 0){
-				if (AcceptRulesMain.players.contains(player.getName())){
+				if (AcceptRulesMain.players.contains(player.getUniqueId().toString())){
 					sender.sendMessage(AcceptRulesMain.AcceptedAllreadyMsg.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1"));
 				}else{						
-					if(AcceptRulesMain.readed.contains(sender)){
-						AcceptRulesPreferences.UserWriter(player.getName());
+					if(AcceptRulesMain.readed.contains(sender))
+					{
+						AcceptRulesPreferences.UserWriter(player.getUniqueId().toString());
 						sender.sendMessage(AcceptRulesMain.AcceptedMsg.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1"));
 						AcceptRulesPreferences.UserReader();
-						if(AcceptRulesMain.TpAfterAccept == true){
+						if(AcceptRulesMain.TpAfterAccept == true)
+						{
 							Location loc = new Location(Bukkit.getWorld("world"), 0, 0, 0, 0, 0);
 							if(!AcceptRulesMain.TpPosition.equals(loc)){
 							player.teleport(AcceptRulesMain.TpPosition);
 							}
 						}
 						 System.out.println("[AcceptRules] Player: "+player.getName()+" have accepted rules!");
-						 Player[] playersonline = Bukkit.getServer().getOnlinePlayers();
-						 if(AcceptRulesMain.Notify==true){
-							 for(Player p:playersonline){
-								 if (p.isOp()||p.hasPermission("acceptrules.notifyonaccept")){
+	
+						 if(AcceptRulesMain.Notify==true)
+						 {
+							 for(Player p : Bukkit.getOnlinePlayers())
+							 {
+								 if (p.isOp() || p.hasPermission("acceptrules.notifyonaccept"))
+								 {
 								 p.sendMessage(ChatColor.GOLD+"[AcceptRules] "+ChatColor.GREEN+"Player: "+player.getName()+" has accepted rules!");
+								 }
 							 }
 						 }
-					}
-					
-					}else{
+					} 
+					else
+					{
 						sender.sendMessage(AcceptRulesMain.MustReadRules.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1"));
 					}	
 				}

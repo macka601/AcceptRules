@@ -1,9 +1,7 @@
 AcceptRules for Bukkit!
 
-Version: v1.7.1
-Author: macka601
-
-I cloned this from rigor789 repo, I have modified this plugin so that it works with the spigot 1.9.2+ versions.
+Version: v1.7
+Author: rigor789
 
 This plugin adds an extra command to your server! When user types /acceptrules then user's name is added to a file under Plugins/AcceptRules/users.dat! The plugin can be configured by a config file which can be found at Plugins/AcceptRules/config.cfg!
 
